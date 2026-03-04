@@ -1,0 +1,47 @@
+name: Matrix Testing
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Don't stop all jobs if one fails
+      fail-fast: false
+      
+      # Run up to 3 jobs at once
+      max-parallel: 3
+      
+      # The matrix combinations
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [14.x, 16.x, 18.x]
+        # Exclude some combinations
+        exclude:
+          - os: macos-latest
+            node-version: 14.x
+          - os: windows-latest
+            node-version: 18.x
+    
+    steps:
+      - uses: actions/checkout@v4.2
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Show environment
+        run: |
+          echo "OS: ${{ matrix.os }}"
+          echo "Node version: ${{ matrix.node-version }}"
+          node --version
+      
+      - name: Run tests
+        run: |
+          echo "Running tests for Node ${{ matrix.node-version }} on ${{ matrix.os }}"
+          echo "Tests passed! ✅"
