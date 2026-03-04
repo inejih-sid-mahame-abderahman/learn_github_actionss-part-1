@@ -1,0 +1,29 @@
+name: Webhook Trigger Example
+
+on:
+  # Run when code is pushed
+  push:
+    branches:
+      - main
+      - 'release/**'  # Any branch starting with release/
+    paths:
+      - 'src/**'      # Only if files in src/ folder change
+  
+  # Run when a pull request is opened
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+
+jobs:
+  test-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2
+      
+      - name: Show event info
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Branch: ${{ github.ref }}"
