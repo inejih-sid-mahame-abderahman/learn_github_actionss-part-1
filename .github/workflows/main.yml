@@ -11,3 +11,8 @@ jobs:
     steps:
       - name: Print Hello Message
         run: echo "Hello World! My first GitHub Action is working!"
+  say-goodbye:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Goodbye Message
+        run: echo "Goodbye World! My first GitHub Action is working!"
