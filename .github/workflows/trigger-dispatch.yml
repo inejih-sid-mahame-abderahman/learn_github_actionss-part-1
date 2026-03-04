@@ -1,0 +1,29 @@
+name: API Trigger
+
+on:
+  repository_dispatch:
+    types:
+      - deploy
+      - backup
+      - incident
+
+jobs:
+  handle-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Process event
+        run: |
+          echo "Event type: ${{ github.event.action }}"
+          echo "Client payload: ${{ toJson(github.event.client_payload) }}"
+      
+      - name: Handle different events
+        if: github.event.action == 'deploy'
+        run: echo "Deploying application..."
+      
+      - name: Handle backup
+        if: github.event.action == 'backup'
+        run: echo "Backing up database..."
+      
+      - name: Handle incident
+        if: github.event.action == 'incident'
+        run: echo "Incident reported: ${{ github.event.client_payload.message }}"
